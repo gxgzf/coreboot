@@ -1,16 +1,23 @@
-name: Build ifdtool
-on: [push, workflow_dispatch]
+name: Build ifdtool for Windows
+on: [workflow_dispatch]
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  build-win:
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Setup MSYS2
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: UCRT64
+          update: true
+          install: mingw-w64-ucrt-x86_64-gcc make
       - name: Compile ifdtool
+        shell: msys2 {0}
         run: |
           cd util/ifdtool
           make
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ifdtool
-          path: util/ifdtool/ifdtool
+          name: ifdtool-windows
+          path: util/ifdtool/ifdtool.exe
