@@ -1,0 +1,16 @@
+name: Build ifdtool
+on: [push, workflow_dispatch]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compile ifdtool
+        run: |
+          cd util/ifdtool
+          make
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ifdtool
+          path: util/ifdtool/ifdtool
